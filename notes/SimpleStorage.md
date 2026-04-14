@@ -167,3 +167,92 @@ function store(uint256 _favoriteNumber) public {
 ```
 
 Since `store()` costs gas, you’re telling this function, to also call the `retrieve()` function, which is more work for it to do. More work costs more gas.
+
+
+### Arrays and Structs
+Make the `favoriteNumber` an internal variable and have the `retrieve()` function be the way to get this. Rename it to:
+
+```solidity
+ uint256 myFavoriteNumber; // 0
+```
+
+What if we want to store not only our favoriteNumber but other people’s favorite numbers too?
+
+We can create an **Array** or a list of favorite numbers
+
+```solidity
+uint256[] listOfFavoriteNumbers; // [0, 78, 90]
+```
+
+Arrays are actually zero indexed.
+
+```solidity
+ 0   1   2
+[77, 78, 90]
+```
+
+**Q. How do we know who’s favorite number each section is?**
+
+- Instead of having a raw list as above, we could create a new type called `Person`.
+- In solidity, you can create your own types using the `struct` keyword
+
+```solidity
+struct Person{
+    uint256 favoriteNumber;
+    string name;
+}
+```
+
+Create a variable of type Person:
+
+```solidity
+Person public roj = Person(7, "Roj");
+```
+
+`roj` is going to be a person with a favorite number of 7 & a name of Roj
+
+NOTE: When you are working with custom types, you have to define both on the left side and on the right side what type it is.
+
+You can be more explicit when working with structs:
+
+```solidity
+Person public roj = Person({favoriteNumber: 7, name: "Roj"});
+```
+
+**Q. What if you have more than one friend? It would be tedious to write variables for all these friends**
+
+```solidity
+Person public roj = Person({favoriteNumber: 7, name: "Roj"});
+Person public mariah = Person({favoriteNumber: 16, name: "Mariah"});
+Person public jon = Person({favoriteNumber: 12, name: "Jon"});
+```
+
+- To create a list of friends, we can actually use the array syntax we just learned  `uint256[] listOfFavoriteNumbers;`
+- And create an array of person or a list of persons.
+
+```solidity
+Person[] public listOfPeople; // [] -> defualts to an empty list
+```
+
+NOTE: When you create arrays with a public keyword, instead of being able to see the whole array, you actually have to put in the index of the element you want to work with, and you get to see that exact element.
+
+![array.png](../images/arrays.png)
+
+It wants to take a uint256 as an input parameter.
+
+**NOTE: The array above is known as a `Dynamic Array` , because the size of the array can actually grow and shrink.**
+
+In Solidity, a dynamic array is signified by whats inside the square brackets `[]`.
+
+- If you add a number, this would be a static array.
+- `Person[3] public listOfPeople` → This list of people can only have a maximum size of 3. We can only put 3 persons in this array.
+
+Create a function that will add people and update this array:
+
+```solidity
+function addPerson(string memory _name, uint256 _favoriteNumber) public {
+   listOfPeople.push(Person(_favoriteNumber, _name));
+}
+```
+
+**NOTE: Arrays come built in with a function called `push()`, which allows us to add elemenst/ add a person to our `listOfPeople` array.**
